@@ -1,8 +1,15 @@
 const TimeSheet = require("./timeSheet.model");
+const Subject = require("../subjects/subjects.model");
+const { DateTime } = require("luxon");
 
 async function createTimeSheet(req, res) {
     try {
-        res.render("timeSheet/create", { date: new Date(), user: res.user });
+        const subjects = await Subject.find({ allowedTeachers: req.user._id }).lean();
+        const date = DateTime.now();
+        const formattedDate = date.toFormat("d LLL yyyy");
+        console.log("🚀 ~ file: timeSheet.controller.js:10 ~ createTimeSheet ~ formattedDate:", formattedDate);
+        formattedDate.replace(" ", "-");
+        res.render("timeSheet/create", { date: formattedDate, subjects, userName: req.user.name, userId: req.user._id });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

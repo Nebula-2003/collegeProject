@@ -2,7 +2,7 @@ const express = require("express");
 const router = express.Router();
 const timeSheetController = require("./timeSheet.controller");
 const { guard } = require("../../helper/guard");
-
+const { validationParm } = require("../../helper/validation");
 // Create a new timeSheet - Get
 router.get("/create", guard(["teacher"]), timeSheetController.createTimeSheet);
 
@@ -16,9 +16,9 @@ router.post("/", guard(["teacher"]), timeSheetController.create);
 // router.get("/:id", timeSheetController.findOne);
 
 // Update a timeSheet with id
-router.put("/:id", timeSheetController.update);
+router.put("/:id", guard(["hod", "admin"]), validationParm, timeSheetController.update);
 
 // Delete a timeSheet with id
-router.delete("/:id", timeSheetController.deleteTimeSheet);
+router.delete("/:id", guard(["hod", "admin"]), validationParm, timeSheetController.deleteTimeSheet);
 
 module.exports = router;

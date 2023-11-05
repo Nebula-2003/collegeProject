@@ -22,23 +22,41 @@
 <body>
     <div class="card mx-auto">
         <div class="card-body">
-            <form>
+            <form action="/users" method="POST">
                 <div class="mb-3">
                     <label for="exampleInputEmail1" class="form-label">Email address</label>
                     <input type="email" placeholder="example@sou.org" class="form-control" id="exampleInputEmail1"
-                        aria-describedby="emailHelp">
+                        aria-describedby="emailHelp" name="email">
                 </div>
                 <div class="mb-3">
                     <label for="exampleInputPassword1" class="form-label">Set Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password">
+                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
+                        name="password">
                 </div>
                 <div class="mb-3">
                     <label for="nameInput" class="form-label">Name</label>
                     <input class="form-control" type="text" placeholder="Name" aria-label="default input example"
-                        id="nameInput">
+                        id="nameInput" name="name">
                 </div>
-                <button type="submit" class="btn btn-primary">Submit</button>
-                <button type="reset" class="btn btn-primary"> Clear Form</button>
+                <div class="d-flex justify-content-center">
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="radio" name="role" id="flexRadioDefault1" value="hod">
+                        <label class="form-check-label" for="flexRadioDefault1">
+                            HOD
+                        </label>
+                    </div>
+                    <div class="form-check me-3">
+                        <input class="form-check-input" type="radio" name="role" id="flexRadioDefault2" checked
+                            value="teacher">
+                        <label class="form-check-label" for="flexRadioDefault2">
+                            Teacher
+                        </label>
+                    </div>
+                </div>
+                <div class="text-center">
+                    <button type="submit" class="btn btn-primary" style="margin: 20px;">Submit</button>
+                    <button type="reset" class="btn btn-primary" style="margin: 20px;"> Clear Form</button>
+                </div>
             </form>
         </div>
     </div>

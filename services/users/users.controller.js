@@ -1,3 +1,4 @@
+const e = require("express");
 const User = require("./users.model");
 const bcrypt = require("bcrypt");
 
@@ -61,7 +62,22 @@ exports.getUserById = async (req, res) => {
 
 //Get Login page
 exports.getLoginPage = async (req, res) => {
-    res.render("login");
+    try {
+        const token = req.cookies.jwt;
+        console.log("🚀 ~ file: users.controller.js:56 ~ exports.getLoginPage= ~ token:", token);
+        if (!token || token === "undefined" || token === "null") {
+            return res.render("login");
+        } else {
+            const user = await User.verifyToken(token);
+            if (!user) {
+                return res.render("login");
+            }
+            return res.redirect("dashboard");
+        }
+    } catch (error) {
+        console.log("🚀 ~ file: users.controller.js:73 ~ exports.getLoginPage= ~ error:", error);
+        res.redirect("/users/login?message=Session expired! Please login again.");
+    }
 };
 
 //Login a user
@@ -72,7 +88,7 @@ exports.loginUser = async (req, res) => {
         const token = await User.generateToken({ _id: user._id });
         console.log("🚀 ~ file: users.controller.js:56 ~ exports.loginUser= ~ token:", token);
         res.cookie("jwt", token, { httpOnly: true });
-        return res.render("dashboard", { user, message: null });
+        return res.redirect("dashboard");
     } catch (error) {
         console.log("🚀 ~ file: users.controller.js:51 ~ exports.loginUser= ~ error:", error);
         res.status(400).send({ error: error.message });
@@ -114,5 +130,20 @@ exports.deleteUserById = async (req, res) => {
         res.send(user);
     } catch (error) {
         res.status(500).send(error);
+    }
+};
+
+exports.userDashboard = async (req, res) => {
+    res.render("dashboard", { user: req.user, message: null });
+};
+
+// Logout a user
+exports.logoutUser = async (req, res) => {
+    try {
+        res.clearCookie("jwt");
+        res.redirect("/users/login");
+    } catch (error) {
+        console.log("🚀 ~ file: users.controller.js:73 ~ exports.logoutUser= ~ error:", error);
+        res.redirect("/users/login?message=Session expired! Please login again.");
     }
 };

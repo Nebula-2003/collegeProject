@@ -16,6 +16,13 @@
             margin-top: 50px;
         }
     </style>
+    <script>
+        let message = "<%= message %>";
+        if (message) {
+            window.alert(message);
+            // history.replaceState({}, document.title, window.location.pathname);
+        }
+    </script>
     <title>Document</title>
 </head>
 

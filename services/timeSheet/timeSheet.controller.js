@@ -9,7 +9,7 @@ async function createTimeSheet(req, res) {
         const formattedDate = date.toFormat("d LLL yyyy");
         console.log("🚀 ~ file: timeSheet.controller.js:10 ~ createTimeSheet ~ formattedDate:", formattedDate);
         formattedDate.replace(" ", "-");
-        res.render("timeSheet/create", { date: formattedDate, subjects, userName: req.user.name, userId: req.user._id });
+        res.render("timeSheet/create", { date: formattedDate, subjects, userName: req.user.name, userId: req.user._id, message: null });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -18,7 +18,36 @@ async function createTimeSheet(req, res) {
 // CREATE
 async function create(req, res) {
     try {
-        const timeSheet = await TimeSheet.create(req.body);
+        let startTime = new Date();
+        let endTime = new Date();
+        startTime.setHours(req.body.startHour);
+        startTime.setMinutes(req.body.startMinute);
+        endTime.setHours(req.body.endHour);
+        endTime.setMinutes(req.body.endMinute);
+        let durationInMin = (endTime - startTime) / 1000 / 60;
+        if (durationInMin < 0) {
+            const subjects = await Subject.find({ allowedTeachers: req.user._id }).lean();
+            const date = DateTime.now();
+            const formattedDate = date.toFormat("d LLL yyyy");
+            console.log("🚀 ~ file: timeSheet.controller.js:10 ~ createTimeSheet ~ formattedDate:", formattedDate);
+            formattedDate.replace(" ", "-");
+            return res.render("timeSheet/create", {
+                date: formattedDate,
+                subjects,
+                userName: req.user.name,
+                userId: req.user._id,
+                message: "End time must be after start time",
+            });
+        }
+        let obj = {
+            subject: req.body.subject,
+            teacher: req.body.teacher,
+            date: new Date(),
+            startTime,
+            endTime,
+            durationInMin,
+        };
+        const timeSheet = await TimeSheet.create(obj);
         res.status(201).json(timeSheet);
     } catch (error) {
         res.status(400).json({ message: error.message });

@@ -7,10 +7,10 @@ const { guard } = require("../../helper/guard");
 router.get("/create", guard(["teacher"]), timeSheetController.createTimeSheet);
 
 // Create a new timeSheet
-router.post("/", timeSheetController.create);
+router.post("/", guard(["teacher"]), timeSheetController.create);
 
 // Retrieve all timeSheets
-router.get("/", timeSheetController.findAll);
+// router.get("/", timeSheetController.findAll);
 
 // Retrieve a single timeSheet with id
 // router.get("/:id", timeSheetController.findOne);

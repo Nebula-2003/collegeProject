@@ -16,6 +16,7 @@ const timeSheetSchema = new Schema(
         date: { type: Date, required: true },
         startTime: { type: Date, required: true },
         endTime: { type: Date, required: true },
+        durationInMin: { type: Number, required: true },
     },
     { timestamps: true, collection: "timeSheets" }
 );

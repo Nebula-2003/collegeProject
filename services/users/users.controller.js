@@ -72,7 +72,7 @@ exports.loginUser = async (req, res) => {
         const token = await User.generateToken({ _id: user._id });
         console.log("🚀 ~ file: users.controller.js:56 ~ exports.loginUser= ~ token:", token);
         res.cookie("jwt", token, { httpOnly: true });
-        return res.render("dashboard", { user });
+        return res.render("dashboard", { user, message: null });
     } catch (error) {
         console.log("🚀 ~ file: users.controller.js:51 ~ exports.loginUser= ~ error:", error);
         res.status(400).send({ error: error.message });

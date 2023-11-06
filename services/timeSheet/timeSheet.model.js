@@ -20,5 +20,5 @@ const timeSheetSchema = new Schema(
     },
     { timestamps: true, collection: "timeSheets" }
 );
-
-module.exports = mongoose.model("timeSheets", timeSheetSchema);
+const Model = mongoose.model("timeSheets", timeSheetSchema);
+module.exports = Model;

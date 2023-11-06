@@ -4,7 +4,7 @@ const timeSheetController = require("./timeSheet.controller");
 const { guard } = require("../../helper/guard");
 const { validationParm } = require("../../helper/validation");
 // Create a new timeSheet - Get
-router.get("/create", guard(["teacher"]), timeSheetController.createTimeSheet);
+router.get("/create", guard(["teacher","admin","hod"]), timeSheetController.createTimeSheet);
 
 // Create a new timeSheet
 router.post("/", guard(["teacher"]), timeSheetController.create);

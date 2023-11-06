@@ -1,6 +1,7 @@
-const e = require("express");
 const User = require("./users.model");
 const bcrypt = require("bcrypt");
+const Subjects = require("../subjects/subjects.model");
+const TimeSheetServices = require("../timeSheet/timeSheet.services");
 
 // get registration page
 exports.registerUser = async (req, res) => {
@@ -17,7 +18,7 @@ exports.registerUser = async (req, res) => {
         if (user.role !== "admin") {
             return res.redirect("/users/login?message=You are not authorized to access this page.");
         }
-        res.render("register");
+        res.render("register", { showElement: true });
     } catch (error) {
         console.log("🚀 ~ file: users.controller.js:21 ~ exports.registerUser= ~ error:", error);
         res.redirect("/users/login?message=Session expired! Please login again.");
@@ -134,7 +135,11 @@ exports.deleteUserById = async (req, res) => {
 };
 
 exports.userDashboard = async (req, res) => {
-    res.render("dashboard", { user: req.user, message: null });
+    let timeSheet = await TimeSheetServices.find({ user: req.user._id }, ["subjects", "user"]);
+    if (req.user.role === "admin") {
+        return res.render("dashboard", { user: req.user, message: null, showElement: true, tableData: timeSheet });
+    }
+    res.render("dashboard", { user: req.user, message: null, showElement: false });
 };
 
 // Logout a user

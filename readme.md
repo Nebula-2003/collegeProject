@@ -1,5 +1,5 @@
 <div style="display: flex; justify-content: flex-end;">
-x    <p align="right">
+   <p align="left">
         Silver Oak University
     </p>
     <p align="right">

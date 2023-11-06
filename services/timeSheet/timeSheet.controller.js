@@ -1,4 +1,4 @@
-const TimeSheet = require("./timeSheet.model");
+const TimeSheetServices = require("./timeSheet.services");
 const Subject = require("../subjects/subjects.model");
 const { DateTime } = require("luxon");
 
@@ -9,7 +9,11 @@ async function createTimeSheet(req, res) {
         const formattedDate = date.toFormat("d LLL yyyy");
         console.log("🚀 ~ file: timeSheet.controller.js:10 ~ createTimeSheet ~ formattedDate:", formattedDate);
         formattedDate.replace(" ", "-");
-        res.render("timeSheet/create", { date: formattedDate, subjects, userName: req.user.name, userId: req.user._id, message: null });
+        let showElement = false;
+        if (req.user.role === "admin") {
+            showElement = true;
+        }
+        res.render("timeSheet/create", { date: formattedDate, subjects, userName: req.user.name, userId: req.user._id, message: null, showElement });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
@@ -47,7 +51,7 @@ async function create(req, res) {
             endTime,
             durationInMin,
         };
-        const timeSheet = await TimeSheet.create(obj);
+        const timeSheet = await TimeSheetServices.create(obj);
         res.status(201).json(timeSheet);
     } catch (error) {
         res.status(400).json({ message: error.message });
@@ -57,7 +61,7 @@ async function create(req, res) {
 // READ
 async function findAll(req, res) {
     try {
-        const timeSheet = await TimeSheet.findById(req.params.id).populate({ path: "subject", select: "name" }).populate("teacher");
+        const timeSheet = await TimeSheetServices.findById(req.params.id).populate({ path: "subject", select: "name" }).populate("teacher");
 
         if (!timeSheet) {
             // return res.status(404).json({ message: "Time sheet not found" });
@@ -71,7 +75,7 @@ async function findAll(req, res) {
 // UPDATE
 async function update(req, res) {
     try {
-        const timeSheet = await TimeSheet.findByIdAndUpdate(req.params.id, req.body, { new: true });
+        const timeSheet = await TimeSheetServices.findByIdAndUpdate(req.params.id, req.body, { new: true });
         if (!timeSheet) {
             return res.status(404).json({ message: "Time sheet not found" });
         }
@@ -84,7 +88,7 @@ async function update(req, res) {
 // DELETE
 async function deleteTimeSheet(req, res) {
     try {
-        const timeSheet = await TimeSheet.findByIdAndDelete(req.params.id);
+        const timeSheet = await TimeSheetServices.findByIdAndDelete(req.params.id);
         if (!timeSheet) {
             return res.status(404).json({ message: "Time sheet not found" });
         }

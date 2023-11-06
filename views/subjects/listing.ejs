@@ -4,33 +4,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/js/bootstrap.bundle.min.js"
         integrity="sha384-C6RzsynM9kWDrMNeT87bh95OGNyZPhcTNXj1NW7RuBCsyN/o0jlpcV8Qyq46cDfL"
         crossorigin="anonymous"></script>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet"
         integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
-    <title>Document</title>
-    <style>
-        .card {
-            width: 50%;
-            margin: auto;
-            margin-top: 50px;
-        }
-    </style>
-    <script>
-        let params = new URLSearchParams(window.location.search);
-        let message = params.get('message');
-        if (message) {
-            window.alert(message);
-            history.replaceState({}, document.title, window.location.pathname);
-        }
-    </script>
 </head>
 
 <body>
     <nav class="navbar navbar-expand-lg bg-body-tertiary">
         <div class="container-fluid">
-            <a class="navbar-brand" href="#">Silver Oak</a>
+            <a class="navbar-brand" href="/users/dashboard">Silver Oak</a>
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
                 aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -40,6 +25,7 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/users/dashboard">Home</a>
                     </li>
+
                     <li class="nav-item">
                         <a class="nav-link" href="/timeSheet/create">Add A Report</a>
                     </li>
@@ -72,44 +58,39 @@
             </ul>
         </div>
     </nav>
-    <div class="card mx-auto">
+    <div class="card mx-auto" style="margin:20px; width:90.5vw;">
         <div class="card-body">
-            <form action="/users" method="POST">
-                <div class="mb-3">
-                    <label for="exampleInputEmail1" class="form-label">Email address</label>
-                    <input type="email" placeholder="example@sou.org" class="form-control" id="exampleInputEmail1"
-                        aria-describedby="emailHelp" name="email">
-                </div>
-                <div class="mb-3">
-                    <label for="exampleInputPassword1" class="form-label">Set Password</label>
-                    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Password"
-                        name="password">
-                </div>
-                <div class="mb-3">
-                    <label for="nameInput" class="form-label">Name</label>
-                    <input class="form-control" type="text" placeholder="Name" aria-label="default input example"
-                        id="nameInput" name="name">
-                </div>
-                <div class="d-flex justify-content-center">
-                    <div class="form-check me-3">
-                        <input class="form-check-input" type="radio" name="role" id="flexRadioDefault1" value="hod">
-                        <label class="form-check-label" for="flexRadioDefault1">
-                            HOD
-                        </label>
-                    </div>
-                    <div class="form-check me-3">
-                        <input class="form-check-input" type="radio" name="role" id="flexRadioDefault2" checked
-                            value="teacher">
-                        <label class="form-check-label" for="flexRadioDefault2">
-                            Teacher
-                        </label>
-                    </div>
-                </div>
-                <div class="text-center">
-                    <button type="submit" class="btn btn-primary" style="margin: 20px;">Submit</button>
-                    <button type="reset" class="btn btn-primary" style="margin: 20px;"> Clear Form</button>
-                </div>
-            </form>
+            <table class="table table-striped-columns">
+                <tr>
+                    <th>Subject</th>
+                    <th>Teachers</th>
+                </tr>
+                <% subjects.forEach(function(item) { %>
+                    <tr>
+                        <td>
+                            <%= item.name %>
+                        </td>
+                        <td>
+                            <% item.allowedTeachers.forEach(function(element) { %>
+                                <div class="row">
+                                    <div class="col">
+                                        <%= element.name %>
+                                    </div>
+                                </div>
+                                <% }); %>
+                        </td>
+                        <td>
+                            <form action="/subjects/update/<%= item._id %>" method="get">
+                                <button class="btn btn-primary">Edit</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form action="/subjects/delete/<%= item._id %>" method="post">
+                                <button class="btn btn-danger">Delete</button>
+                            </form>
+                    </tr>
+                    <% }); %>
+            </table>
         </div>
     </div>
 </body>

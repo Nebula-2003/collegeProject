@@ -1,10 +1,12 @@
+const { name } = require("ejs");
 const Subject = require("./subjects.model");
 
 // GET all subjects
 const getAllSubjects = async (req, res) => {
     try {
-        const subjects = await Subject.find();
-        res.status(200).json(subjects);
+        let subjects = await Subject.find().populate("allowedTeachers");
+        console.log("🚀 ~ file: subjects.controller.js:15 ~ subjects=subjects.map ~ subjects:", subjects);
+        res.render("subjects/listing", { subjects: subjects, showElement: true });
     } catch (err) {
         res.status(500).json({ message: err.message });
     }

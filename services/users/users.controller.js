@@ -29,12 +29,18 @@ exports.registerUser = async (req, res) => {
 // Create a new user
 exports.createUser = async (req, res) => {
     try {
+        let ifExists = await User.findOne({ email: req.body.email });
+        console.log("🚀 ~ file: users.controller.js:33 ~ exports.createUser= ~ ifExists:", ifExists);
+        if (ifExists) {
+            return res.redirect("/users/register?message=User already exists!");
+        }
         let password = req.body.password;
         let hashedPassword = await bcrypt.hash(password, 10);
         req.body.password = hashedPassword;
         const user = await User.create(req.body);
-        res.redirect("/users");
+        res.redirect("/users/");
     } catch (error) {
+        console.log("🚀 ~ file: users.controller.js:43 ~ exports.createUser= ~ error:", error);
         res.status(400).send(error);
     }
 };

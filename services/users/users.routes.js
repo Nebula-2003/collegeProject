@@ -11,7 +11,7 @@ router.get("/register", guard(["admin"]), usersController.registerUser);
 router.post("/", usersController.createUser);
 
 // Retrieve all users
-router.get("/", usersController.getAllUsers);
+router.get("/", guard(["admin", "hod"]), usersController.getAllUsers);
 
 //Get Login page
 router.get("/login", usersController.getLoginPage);

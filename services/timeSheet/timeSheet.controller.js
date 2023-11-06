@@ -51,8 +51,9 @@ async function create(req, res) {
             endTime,
             durationInMin,
         };
+        console.log("🚀 ~ file: timeSheet.controller.js:54 ~ create ~ obj:", obj);
         const timeSheet = await TimeSheetServices.create(obj);
-        res.status(201).json(timeSheet);
+        res.redirect("/users/dashboard");
     } catch (error) {
         res.status(400).json({ message: error.message });
     }

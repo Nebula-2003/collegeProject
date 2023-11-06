@@ -1,8 +1,7 @@
-const { query } = require("express");
 const Model = require("./timeSheet.model");
 
-exports.create = async (req, res) => {
-    return await Model.create(req.body);
+exports.create = async (obj) => {
+    return await Model.create(obj);
 };
 
 exports.findById = async (id) => {
@@ -10,7 +9,7 @@ exports.findById = async (id) => {
 };
 
 exports.find = async (query, populate) => {
-    return await Model.find(query).populate(populate).lean();
+    return await Model.find(query).populate(populate).lean().sort({ createdAt: -1 });
 };
 
 exports.findAll = async (query) => {

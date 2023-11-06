@@ -2,6 +2,7 @@ const User = require("./users.model");
 const bcrypt = require("bcrypt");
 const Subjects = require("../subjects/subjects.model");
 const TimeSheetServices = require("../timeSheet/timeSheet.services");
+const { DateTime } = require("luxon");
 
 // get registration page
 exports.registerUser = async (req, res) => {
@@ -32,7 +33,7 @@ exports.createUser = async (req, res) => {
         let hashedPassword = await bcrypt.hash(password, 10);
         req.body.password = hashedPassword;
         const user = await User.create(req.body);
-        res.status(201).send(user);
+        res.redirect("/users");
     } catch (error) {
         res.status(400).send(error);
     }
@@ -41,8 +42,9 @@ exports.createUser = async (req, res) => {
 // Retrieve all users
 exports.getAllUsers = async (req, res) => {
     try {
-        const users = await User.find({});
-        res.send(users);
+        let users = await User.find({}).populate({ path: "subjects" }).lean();
+        console.log("🚀 ~ file: users.controller.js:46 ~ exports.getAllUsers= ~ users:", users);
+        res.render("userslisting", { users: users, showElement: true });
     } catch (error) {
         res.status(500).send(error);
     }
@@ -89,7 +91,7 @@ exports.loginUser = async (req, res) => {
         const token = await User.generateToken({ _id: user._id });
         console.log("🚀 ~ file: users.controller.js:56 ~ exports.loginUser= ~ token:", token);
         res.cookie("jwt", token, { httpOnly: true });
-        return res.redirect("dashboard");
+        return res.redirect("/users/dashboard");
     } catch (error) {
         console.log("🚀 ~ file: users.controller.js:51 ~ exports.loginUser= ~ error:", error);
         res.status(400).send({ error: error.message });
@@ -135,11 +137,42 @@ exports.deleteUserById = async (req, res) => {
 };
 
 exports.userDashboard = async (req, res) => {
-    let timeSheet = await TimeSheetServices.find({ user: req.user._id }, ["subjects", "user"]);
+    let timeSheet = await TimeSheetServices.find({ teacher: req.user._id }, [
+        { path: "subject", select: "name" },
+        { path: "teacher", select: "name" },
+    ]);
+    console.log("🚀 ~ file: users.controller.js:143 ~ exports.userDashboard= ~ timeSheet:", timeSheet);
+
+    timeSheet = timeSheet.map((item) => {
+        const date = DateTime.fromJSDate(new Date(item.date));
+        const formattedDate = date.toFormat("LLL dd yyyy");
+
+        const startTime = DateTime.fromJSDate(new Date(item.startTime));
+        const formattedStartTime = startTime.toFormat("HH:mm:ss");
+
+        const endTime = DateTime.fromJSDate(new Date(item.endTime));
+        const formattedEndTime = endTime.toFormat("HH:mm:ss");
+
+        return {
+            ...item,
+            date: formattedDate,
+            startTime: formattedStartTime,
+            endTime: formattedEndTime,
+        };
+    });
+
+    console.log(timeSheet); // Outputs date in the format: 2022 Jan 01
+    // timeSheet = timeSheet.map((item) => {
+    //     return {
+    //         ...item._doc,
+    //         date: new Date(item.date).toLocaleDateString(),
+    //     };
+    // });
+    console.log("🚀 ~ file: users.controller.js:139 ~ exports.userDashboard= ~ timeSheet:", timeSheet);
     if (req.user.role === "admin") {
         return res.render("dashboard", { user: req.user, message: null, showElement: true, tableData: timeSheet });
     }
-    res.render("dashboard", { user: req.user, message: null, showElement: false });
+    res.render("dashboard", { user: req.user, message: null, showElement: false, tableData: timeSheet });
 };
 
 // Logout a user

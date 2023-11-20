@@ -55,9 +55,6 @@ npm i
 3. Create a `.env` file in the root directory and add the following environment variables, you can find template in
    the `.env.example` file.
 
-````bash
-
-```bash
 4. Start the application by running `npm run start`.
 
 ```bash

@@ -17,6 +17,13 @@ app.set("views", path.join(__dirname, "views"));
 
 connectDB();
 
+function logRequestUrl(req, res, next) {
+    console.log(`Request URL: ${req.url}`);
+    next();
+}
+
+// Then, use it in your application like this:
+app.use(logRequestUrl);
 app.use("/", routes);
 
 app.listen(process.env.PORT, () => console.log(`Example app listening on port ${process.env.PORT}!`));

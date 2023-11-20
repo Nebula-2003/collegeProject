@@ -1,5 +1,6 @@
 const { name } = require("ejs");
 const Subject = require("./subjects.model");
+const UserServices = require("../users/users.services");
 
 // GET all subjects
 const getAllSubjects = async (req, res) => {
@@ -34,6 +35,8 @@ const createSubject = async (req, res) => {
             credits: req.body.credits,
             allowedTeachers: req.body.allowedTeachers,
         });
+        console.log("🚀 ~ file: subjects.controller.js:38 ~ createSubject ~ subject:", subject);
+        const teachers = await UserServices.updateMany({ _id: { $in: req.body.allowedTeachers } }, { $push: { subjects: subject._id } });
         res.status(201).json(subject);
     } catch (err) {
         res.status(400).json({ message: err.message });

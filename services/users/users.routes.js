@@ -29,9 +29,9 @@ router.get("/logout", usersController.logoutUser);
 router.get("/:userId", validationParm, usersController.getUserById);
 
 // Update a user with userId
-router.put("/:userId", validationParm, usersController.updateUserById);
+router.put("/update/:id", validationParm, usersController.updateUserById);
 
 // Delete a user with userId
-router.delete("/:userId", validationParm, usersController.deleteUserById);
+router.delete("/:id", validationParm, usersController.deleteUserById);
 
 module.exports = router;

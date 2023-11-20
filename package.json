@@ -1,10 +1,10 @@
 {
     "name": "collegeproject",
     "version": "1.0.0",
-    "description": "",
+    "description": "College project: Demo basic HRMS app with Node.js, Express, MongoDB.",
     "main": "app.js",
     "scripts": {
-        "test": "nodemon app.js"
+        "start": "nodemon app.js"
     },
     "keywords": [],
     "author": "PrasadTejusRaghavendra",

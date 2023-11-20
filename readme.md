@@ -1,4 +1,4 @@
-# Project Title: HRMS Demo
+# Title: HRMS Demo
 
 This project was developed as part of my third-semester internship program, showcasing the skills and knowledge acquired during the internship.
 

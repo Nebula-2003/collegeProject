@@ -52,11 +52,17 @@ git clone https://github.com/Nebula-2003/collegeProject.git .
 npm i
 ```
 
-3. Start the application by running `npm run start`.
+3. Create a `.env` file in the root directory and add the following environment variables, you can find template in
+   the `.env.example` file.
+
+````bash
+
+```bash
+4. Start the application by running `npm run start`.
 
 ```bash
 npm run start
-```
+````
 
 4. The application runs on `localhost:3000` by default.
 
@@ -64,4 +70,4 @@ npm run start
 
 -   **Prasad Tejus Raghavendra**
 -   **tejus.devstree@gmail.com**
--   [GitHub](github.com/Nebula-2003) (if applicable)
+-   [GitHub](github.com/Nebula-2003)

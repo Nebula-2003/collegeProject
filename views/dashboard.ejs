@@ -31,19 +31,21 @@
                     <li class="nav-item">
                         <a class="nav-link active" aria-current="page" href="/users/dashboard">Home</a>
                     </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="/timeSheet/create">Add A Report</a>
-                    </li>
-                    <li class="nav-item dropdown">
-                        <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
-                            aria-expanded="false">
-                            Account Actions
-                        </a>
-                        <ul class="dropdown-menu">
-                            <li><a class="dropdown-item" href="#">Change Password</a></li>
-                            <li><a class="dropdown-item" href="#">Add A Subject</a></li>
-                        </ul>
-                    </li>
+                    <% if (!showElement) { %>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/timeSheet/create">Add A Report</a>
+                        </li>
+                        <% }%>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown"
+                                    aria-expanded="false">
+                                    Account Actions
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="dropdown-item" href="#">Change Password</a></li>
+                                    <li><a class="dropdown-item" href="#">Add A Subject</a></li>
+                                </ul>
+                            </li>
                 </ul>
             </div>
             <ul class="navbar-nav ms-auto">
@@ -63,34 +65,65 @@
             </ul>
         </div>
     </nav>
-    <div class="card mx-auto" style="margin:20px; width:90.5vw;">
-        <div class="card-body">
-            <table class="table table-striped-columns">
-                <tr>
-                    <th>Date</th>
-                    <th>Subject</th>
-                    <th>Start Time</th>
-                    <th>End Time</th>
-                </tr>
-                <% tableData.forEach(function(item) { %>
+    <% if (!showElement) { %>
+        <div class="card mx-auto" style="margin:20px; width:90.5vw;">
+            <div class="card-body">
+                <table class="table table-striped-columns">
                     <tr>
-                        <td>
-                            <%= item.date %>
-                        </td>
-                        <td>
-                            <%= item.subject.name %>
-                        </td>
-                        <td>
-                            <%= item.startTime %>
-                        </td>
-                        <td>
-                            <%= item.endTime %>
-                        </td>
+                        <th>Date</th>
+                        <th>Subject</th>
+                        <th>Start Time</th>
+                        <th>End Time</th>
                     </tr>
-                    <% }); %>
-            </table>
+                    <% tableData.forEach(function(item) { %>
+                        <tr>
+                            <td>
+                                <%= item.date %>
+                            </td>
+                            <td>
+                                <%= item.subject.name %>
+                            </td>
+                            <td>
+                                <%= item.startTime %>
+                            </td>
+                            <td>
+                                <%= item.endTime %>
+                            </td>
+                        </tr>
+                        <% }); %>
+                </table>
+            </div>
         </div>
-    </div>
+        <% }%>
+            <div class="card mx-auto" style="margin:20px; width:90.5vw;">
+                <div class="card-body">
+                    <% if (showElement) { %>
+                        <div class="card text-center">
+                            <div class="card-header">
+                                Welcome Admin
+                            </div>
+                            <div class="card-body">
+                                <h5 class="card-title">What will you doing today</h5>
+                                <p class="card-text">Have a great productive day.</p>
+                                <a href="/users/register" class="btn btn-primary">Register A User</a>
+                            </div>
+                        </div>
+                        <% }%>
+                            <% if (!showElement) { %>
+                                <div class="card text-center">
+                                    <div class="card-header">
+                                        Welcome <%= user.name %>
+                                    </div>
+                                    <div class="card-body">
+                                        <h5 class="card-title">What will you doing today</h5>
+                                        <p class="card-text">Have a great productive day.</p>
+                                        <a href="/timeSheet/create" class="btn btn-primary">Add A Report</a>
+                                    </div>
+                                </div>
+                                <% }%>
+                </div>
+            </div>
+
 </body>
 
 </html>

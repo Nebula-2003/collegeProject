@@ -44,7 +44,7 @@ exports.createUser = async (req, res) => {
         res.status(400).send(error);
     }
 };
-
+    
 // Retrieve all users
 exports.getAllUsers = async (req, res) => {
     try {
@@ -100,7 +100,7 @@ exports.loginUser = async (req, res) => {
         return res.redirect("/users/dashboard");
     } catch (error) {
         console.log("🚀 ~ file: users.controller.js:51 ~ exports.loginUser= ~ error:", error);
-        res.status(400).send({ error: error.message });
+        return res.redirect(`/users/login?message=${error.message}`);
     }
 };
 

@@ -60,24 +60,6 @@ npm run start
 
 4. The application runs on `localhost:3000` by default.
 
-## Usage
-
-Describe how to use the project, including any specific steps users need to follow. Provide examples of inputs and expected outputs.
-
-## Contributing
-
-If you wish to contribute to this project, follow these steps:
-
-1. Fork the repository.
-2. Create a new branch for your feature or bug fix.
-3. Make changes and commit them with descriptive messages.
-4. Push your changes to your fork.
-5. Submit a pull request, detailing the changes made.
-
-## License
-
-This project is licensed under the MIT License.
-
 ## Contact Information
 
 -   **Prasad Tejus Raghavendra**
